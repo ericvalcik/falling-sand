@@ -3,7 +3,7 @@ import { Canvas } from "./Canvas.ts";
 import { createCells } from "./utils.ts";
 
 export class Automata {
-  public cells: boolean[][];
+  public cells: (string | undefined)[][];
   public size = maxCellIndex + 1;
 
   constructor() {
@@ -18,7 +18,7 @@ export class Automata {
       for (let x = 0; x < this.size; x++) {
         debugText += this.cells[x][y] ? "X" : ".";
         if (this.cells[x][y]) {
-          canvas.drawCell(x, y);
+          canvas.drawCell(x, y, this.cells[x][y]);
         }
       }
       debugText += "\n";
@@ -39,22 +39,22 @@ export class Automata {
       for (let x = 0; x < this.size; x++) {
         if (this.cells[x][y]) {
           if (y === maxCellIndex) {
-            nextCells[x][y] = true;
+            nextCells[x][y] = this.cells[x][y];
             continue;
           }
           if (!this.cells[x][y + 1]) {
-            nextCells[x][y + 1] = true;
+            nextCells[x][y + 1] = this.cells[x][y];
             continue;
           }
           if (x > 0 && !this.cells[x - 1][y + 1]) {
-            nextCells[x - 1][y + 1] = true;
+            nextCells[x - 1][y + 1] = this.cells[x][y];
             continue;
           }
           if (x < maxCellIndex && !this.cells[x + 1][y + 1]) {
-            nextCells[x + 1][y + 1] = true;
+            nextCells[x + 1][y + 1] = this.cells[x][y];
             continue;
           }
-          nextCells[x][y] = true;
+          nextCells[x][y] = this.cells[x][y];
         }
       }
     }

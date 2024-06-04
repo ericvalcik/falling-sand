@@ -14,25 +14,12 @@ export class Canvas {
     this.ctx.fillStyle = "black";
   }
 
-  public drawGrid() {
-    for (let i = 0; i <= canvasSize; i += cellSize) {
-      // vertical lines
-      this.ctx.beginPath();
-      this.ctx.moveTo(i, 0);
-      this.ctx.lineTo(i, canvasSize);
-      this.ctx.stroke();
-
-      // horizontal lines
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, i);
-      this.ctx.lineTo(canvasSize, i);
-      this.ctx.stroke();
-    }
-  }
-
-  public drawCell(x: number, y: number) {
+  public drawCell(x: number, y: number, color?: string) {
     if (x < 0 || y < 0 || x > maxCellIndex || y > maxCellIndex) {
       return;
+    }
+    if (color) {
+      this.ctx.fillStyle = color;
     }
     this.ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
   }

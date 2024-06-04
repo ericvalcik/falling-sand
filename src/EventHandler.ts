@@ -7,6 +7,7 @@ export class EventHandler {
   public automata: Automata;
   public updateInterval: number | null = null;
   public mouseDown = false;
+  public sandColor: string = "#000000";
 
   constructor(canvas: Canvas, automata: Automata) {
     this.canvas = canvas;
@@ -22,6 +23,12 @@ export class EventHandler {
     document.getElementById("clear-button").addEventListener("click", () => {
       this.automata.clear();
       this.render();
+    });
+    // @ts-ignore
+    document.getElementById("color-button").addEventListener("click", (e) => {
+      this.sandColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      // @ts-ignore
+      e.currentTarget.style.backgroundColor = this.sandColor;
     });
 
     // setup canvas event listeners
@@ -46,14 +53,14 @@ export class EventHandler {
             x + i < 0 ||
             y + j < 0 ||
             x + i > this.automata.size ||
-            y + j > this.automata.size
+            y + j > this.automata.size ||
+            this.automata.cells[x + i][y + j]
           ) {
             continue;
           }
-          this.automata.cells[x + i][y + j] = true;
+          this.automata.cells[x + i][y + j] = this.sandColor;
         }
       }
-      this.automata.cells[x][y] = true;
       this.render();
     }
   };
