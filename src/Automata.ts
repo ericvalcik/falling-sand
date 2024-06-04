@@ -7,8 +7,15 @@ export class Automata {
   public size = maxCellIndex + 1;
 
   constructor() {
-    this.cells = createCells(this.size);
-    console.log(this.cells);
+    if (localStorage.getItem("cells")) {
+      this.cells = JSON.parse(localStorage.getItem("cells") as string);
+    } else {
+      this.cells = createCells(this.size);
+    }
+  }
+
+  public saveCells() {
+    localStorage.setItem("cells", JSON.stringify(this.cells));
   }
 
   public render(canvas: Canvas, { debug } = { debug: false }) {
@@ -30,6 +37,7 @@ export class Automata {
 
   public clear() {
     this.cells = createCells(this.size);
+    this.saveCells();
   }
 
   public run() {
@@ -60,5 +68,6 @@ export class Automata {
     }
 
     this.cells = nextCells;
+    this.saveCells();
   }
 }

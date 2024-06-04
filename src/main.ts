@@ -18,3 +18,5 @@ document.getElementById("app").innerHTML = `
 const canvas = new Canvas();
 const automata = new Automata();
 new EventHandler(canvas, automata);
+
+automata.render(canvas);

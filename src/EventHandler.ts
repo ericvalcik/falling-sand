@@ -33,22 +33,21 @@ export class EventHandler {
 
     // setup canvas event listeners
     this.canvas.canvas.addEventListener("mousedown", () => {
-      console.log("mousedown");
       this.mouseDown = true;
     });
     this.canvas.canvas.addEventListener("mouseup", () => {
-      console.log("mouseup");
       this.mouseDown = false;
     });
     this.canvas.canvas.addEventListener("mousemove", this.mouseMoveFn);
   }
 
   public mouseMoveFn = (e: MouseEvent) => {
+    const offset = 2;
     if (this.mouseDown) {
       const x = Math.floor(e.offsetX / cellSize);
       const y = Math.floor(e.offsetY / cellSize);
-      for (let i = -1; i <= 1; i++) {
-        for (let j = -1; j <= 1; j++) {
+      for (let i = -offset; i <= offset; i++) {
+        for (let j = -offset; j <= offset; j++) {
           if (
             x + i < 0 ||
             y + j < 0 ||
@@ -61,6 +60,7 @@ export class EventHandler {
           this.automata.cells[x + i][y + j] = this.sandColor;
         }
       }
+      this.automata.saveCells();
       this.render();
     }
   };
