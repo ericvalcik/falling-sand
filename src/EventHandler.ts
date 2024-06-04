@@ -5,9 +5,11 @@ import { cellSize, msPerUpdate } from "./consts.ts";
 export class EventHandler {
   public canvas: Canvas;
   public automata: Automata;
-  public updateInterval: number | null = null;
+  public isPaused = true;
+
   public mouseDown = false;
   public sandColor: string = "#000000";
+  public mouseLocation: { x: number; y: number } = { x: 0, y: 0 };
 
   constructor(canvas: Canvas, automata: Automata) {
     this.canvas = canvas;
@@ -39,13 +41,15 @@ export class EventHandler {
       this.mouseDown = false;
     });
     this.canvas.canvas.addEventListener("mousemove", this.mouseMoveFn);
+
+    // start rendering loop
+    setInterval(this.update, msPerUpdate);
   }
 
-  public mouseMoveFn = (e: MouseEvent) => {
+  public addSand = () => {
     const offset = 2;
     if (this.mouseDown) {
-      const x = Math.floor(e.offsetX / cellSize);
-      const y = Math.floor(e.offsetY / cellSize);
+      const { x, y } = this.mouseLocation;
       for (let i = -offset; i <= offset; i++) {
         for (let j = -offset; j <= offset; j++) {
           if (
@@ -65,25 +69,29 @@ export class EventHandler {
     }
   };
 
+  public mouseMoveFn = (e: MouseEvent) => {
+    const x = Math.floor(e.offsetX / cellSize);
+    const y = Math.floor(e.offsetY / cellSize);
+    this.mouseLocation = { x, y };
+  };
+
   public render = () => {
     this.automata.render(this.canvas);
   };
 
   public update = () => {
-    this.automata.run();
+    if (this.mouseDown) {
+      this.addSand();
+    }
+    if (!this.isPaused) {
+      this.automata.run();
+    }
     this.render();
   };
 
   public pauseButtonFn = (e: Event) => {
-    if (this.updateInterval === null) {
-      this.updateInterval = setInterval(this.update, msPerUpdate);
-      // @ts-ignore
-      e.currentTarget.innerHTML = "pause";
-    } else {
-      clearInterval(this.updateInterval);
-      this.updateInterval = null;
-      // @ts-ignore
-      e.currentTarget.innerHTML = "start";
-    }
+    // @ts-ignore
+    e.currentTarget.innerHTML = this.isPaused ? "pause" : "start";
+    this.isPaused = !this.isPaused;
   };
 }
