@@ -28,13 +28,34 @@ export class Automata {
     }
   }
 
+  public clear() {
+    this.cells = createCells(this.size);
+  }
+
   public run() {
     const nextCells = createCells(this.size);
 
-    for (let y = 0; y < this.size; y++) {
+    for (let y = this.size - 1; y >= 0; y--) {
       for (let x = 0; x < this.size; x++) {
-        const prevY = y === 0 ? this.size - 1 : y - 1;
-        nextCells[x][y] = this.cells[x][prevY];
+        if (this.cells[x][y]) {
+          if (y === maxCellIndex) {
+            nextCells[x][y] = true;
+            continue;
+          }
+          if (!this.cells[x][y + 1]) {
+            nextCells[x][y + 1] = true;
+            continue;
+          }
+          if (x > 0 && !this.cells[x - 1][y + 1]) {
+            nextCells[x - 1][y + 1] = true;
+            continue;
+          }
+          if (x < maxCellIndex && !this.cells[x + 1][y + 1]) {
+            nextCells[x + 1][y + 1] = true;
+            continue;
+          }
+          nextCells[x][y] = true;
+        }
       }
     }
 

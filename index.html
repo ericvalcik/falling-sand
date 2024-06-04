@@ -7,7 +7,13 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="flex flex-col gap-2 items-start">
+      <div id="app"></div>
+      <div class="flex gap-2">
+        <button id="pause-button" class="w-[80px]">start</button>
+        <button id="clear-button">clear</button>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
