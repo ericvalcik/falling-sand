@@ -50,10 +50,40 @@ export class Automata {
     // the x (sand) on the top is efectively blocked
     // by the bottom one, even though the bottom one
     // is falling (or should be in a normal world)
-    this.run_sync();
+    // this.run_sync();
+
+    // An attempt to fix the previous issue
+    this.run_inplace();
   }
 
-  public run_by_row() {}
+  public run_inplace() {
+    for (let y = this.size - 1; y >= 0; y--) {
+      for (let x = 0; x < this.size; x++) {
+        if (this.cells[x][y]) {
+          if (y === maxCellIndex) {
+            continue;
+          }
+          if (!this.cells[x][y + 1]) {
+            this.cells[x][y + 1] = this.cells[x][y];
+            this.cells[x][y] = undefined;
+            continue;
+          }
+          if (x > 0 && !this.cells[x - 1][y + 1]) {
+            this.cells[x - 1][y + 1] = this.cells[x][y];
+            this.cells[x][y] = undefined;
+            continue;
+          }
+          if (x < maxCellIndex && !this.cells[x + 1][y + 1]) {
+            this.cells[x + 1][y + 1] = this.cells[x][y];
+            this.cells[x][y] = undefined;
+            continue;
+          }
+        }
+      }
+    }
+
+    this.saveCells();
+  }
 
   public run_sync() {
     const nextCells = createCells(this.size);
