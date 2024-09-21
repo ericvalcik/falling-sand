@@ -40,7 +40,22 @@ export class Automata {
     this.saveCells();
   }
 
+  // In this function call the chosen simulating function
   public run() {
+    // Runs the simulation for the whole matrix at once
+    // that means that in the following grid:
+    //     . . x . .
+    //     . . x . .
+    //     . . . . .
+    // the x (sand) on the top is efectively blocked
+    // by the bottom one, even though the bottom one
+    // is falling (or should be in a normal world)
+    this.run_sync();
+  }
+
+  public run_by_row() {}
+
+  public run_sync() {
     const nextCells = createCells(this.size);
 
     for (let y = this.size - 1; y >= 0; y--) {

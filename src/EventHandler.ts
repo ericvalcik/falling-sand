@@ -21,16 +21,23 @@ export class EventHandler {
     document
       .getElementById("pause-button")
       .addEventListener("click", this.pauseButtonFn);
+
     // @ts-ignore
     document.getElementById("clear-button").addEventListener("click", () => {
       this.automata.clear();
       this.render();
     });
+
     // @ts-ignore
     document.getElementById("color-button").addEventListener("click", (e) => {
       this.sandColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
       // @ts-ignore
       e.currentTarget.style.backgroundColor = this.sandColor;
+    });
+
+    // @ts-ignore
+    document.getElementById("step-button")?.addEventListener("click", (e) => {
+      this.automata.run();
     });
 
     // setup canvas event listeners
